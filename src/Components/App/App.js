@@ -22,6 +22,7 @@ class App extends Component {
     this.search = this.search.bind(this);
     }
 
+  // Add a track to the playlist if not already there
   addTrack(track) {
     let isInPlaylist = this.state.playlistTracks.find(is => is.id === track.id); // is the track in the playlist already ?
     if (!isInPlaylist) {
@@ -29,15 +30,18 @@ class App extends Component {
     }
   }
 
+  // Removes a track from the playlist
   removeTrack(track) {
     let indexInPlaylist = this.state.playlistTracks.findIndex(is => is.id === track.id); // is the track in the playlist already ?
     this.setState({playListTracks: this.state.playlistTracks.splice(indexInPlaylist, 1)});
   }
 
+  // Updates playlist name
   updatePlaylistName(name) {
     this.setState({playlistName: name});
   }
 
+  // Saves playlist using Spotify.playlist function
   savePlaylist() {
     let playlistName = this.state.playlistName;
     let trackURIs = [];
@@ -55,6 +59,7 @@ class App extends Component {
 //    document.getElementById('playlistName').value='New PlaylistName';
   }
 
+  // Searches through Spotify API using Spotify.search function
   search(term) {
     Spotify.search(term).then(tracks => {
       this.setState({
