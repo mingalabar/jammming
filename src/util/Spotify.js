@@ -1,5 +1,5 @@
 const USER_ID = '6b82ab969eb74affbe6ca604b3dccfa8';
-const REDIRECT_URI = 'http://jammmingCH.surge.sh';
+const REDIRECT_URI = 'http://localhost:3000/';
 const accessURIBase = 'https://accounts.spotify.com/authorize';
 const spotifyURIBase = 'https://api.spotify.com/v1/';
 
@@ -23,9 +23,32 @@ const Spotify = {
       return accessToken;
     } else {
       const accessURI = `${accessURIBase}?client_id=${USER_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${REDIRECT_URI}`;
-      //window.location = accessURI;
+      window.location = accessURI;
     }
   },
+
+  // method that loads audiofeatures of an array of tracks from Spotify API
+  loadFeatures(tracks) {
+        tracks.forEach(track => {
+            return fetch(`${spotifyURIBase}audio-features/${track.id}`, { // retrival of the info for the term supplied.
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+              }
+            }
+            ).then(response => { return response.json() ; }
+            ).then(jsonResponse => { // parsing of the retreived data into json objects.
+              if (!jsonResponse.tempo) {
+                return [];
+              }
+              track.tempo = jsonResponse.tempo;
+              track.danceability = jsonResponse.danceability;
+              track.energy = jsonResponse.energy;
+              track.valence = jsonResponse.valence;
+            })
+          });
+    return tracks;
+  },
+
   /* method that takes the previously genereated Access token and performs search
   with the term passed from the App component. */
   search(term) {
@@ -41,15 +64,19 @@ const Spotify = {
         return [];
       }
 /* picking of the json data and assigning to track object. */
-      return jsonResponse.tracks.items.map(track => ({
+      let tracks = jsonResponse.tracks.items.map(track => ({
         id: track.id,
         name: track.name,
         artist: track.artists[0].name,
         album: track.album.name,
+        preview_url : track.preview_url,
         uri: track.uri
       }));
+      Spotify.loadFeatures(tracks);
+      return tracks;
     });
   },
+
   /* method that takes the given playlist and saves to the users Spotify account. */
   savePlaylist(name, trackURIs) {
     if (!name || !trackURIs) return;
@@ -65,7 +92,6 @@ const Spotify = {
       body: JSON.stringify({'uris': trackURIs,}) };
     let userID, playlistID;
     // Get user id from Spotify
-    console.log('rpout');
     return fetch('https://api.spotify.com/v1/me', {headers: headers})
     .then(response => response.json())
     .then(jsonResponse => {
@@ -80,6 +106,7 @@ const Spotify = {
         });
     });
   },
+
 };
 
 export default Spotify;

@@ -1,7 +1,14 @@
 .Track {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   border-bottom: 1px solid rgba(256, 256, 256, 0.8);
+  padding-top:10px;
+}
+
+.Track a {
+  color: #FFFFFF;
+  font-size:.83rem;
+  font-weight: 300;
 }
 
 .Track-action {
@@ -20,7 +27,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 72px;
+  height: 150px;
+  line-height: normal;
 }
 
 .Track-information h3 {
