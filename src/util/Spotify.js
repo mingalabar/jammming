@@ -1,6 +1,6 @@
 const USER_ID = '6b82ab969eb74affbe6ca604b3dccfa8';
-const REDIRECT_URI = 'http://jammmingCH.surge.sh';
-//const REDIRECT_URI = 'http://localhost:3000/';
+//const REDIRECT_URI = 'http://jammmingCH.surge.sh';
+const REDIRECT_URI = 'http://localhost:3000/';
 const accessURIBase = 'https://accounts.spotify.com/authorize';
 const spotifyURIBase = 'https://api.spotify.com/v1/';
 
